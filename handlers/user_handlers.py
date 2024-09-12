@@ -15,7 +15,7 @@ router = Router()
 # функция для реагирования на команду /start
 @router.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
-    await message.answer(config('Welcome_Text'), reply_markup=us_kb.main_keyboard())
+    await message.answer(config('Welcome_Text'), reply_markup=await us_kb.main_keyboard())
     telegram_id = message.from_user.id
     user_data = await get_user_by_id(telegram_id)
     if user_data is None:
@@ -62,11 +62,19 @@ async def command_help_handler(message: Message) -> None:
 
 
 
-#Реакция на сообщение канала
-@router.channel_post()
-async def chanel_message(chanel: Message):
-    await chanel.answer(chanel.text.split("\n")[0]+'\n'+
-    chanel.text.split("\n")[2]+'\n'+
-    chanel.text.split("\n")[3])
+# #Реакция на сообщение канала
+# @router.channel_post()
+# async def chanel_message(chanel: Message):
+#     await chanel.answer(text = chanel.text.split("\n")[0], reply_markup = await us_kb.create_inline_keyboard())
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+    # chanel.text.split("\n")[2]+'\n'+
+    # chanel.text.split("\n")[3])
 
     

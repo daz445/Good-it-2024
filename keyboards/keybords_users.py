@@ -1,8 +1,9 @@
 from aiogram import Router
 from aiogram.filters import CommandStart, Command
-from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo, Repl
+from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
 from decouple import config
-def main_keyboard():
+from aiogram.utils.keyboard import InlineKeyboardBuilder
+async def main_keyboard():
     kb_list = [
         [KeyboardButton(text = "Добавить проект",web_app = WebAppInfo(url='https://bdu.fstec.ru/vul/2024-06792'))],
         [KeyboardButton(text = "Изменить проект")],
@@ -13,5 +14,7 @@ def main_keyboard():
 
 
 
-def
-
+async def create_inline_keyboard():
+    b = InlineKeyboardButton(text="Web", web_app='https://bdu.fstec.ru/vul/2024-06792') 
+    kb = InlineKeyboardMarkup().add(b)
+    return kb 
