@@ -2,10 +2,12 @@ import logging
 from aiogram.types import BotCommand, BotCommandScopeDefault, ReplyKeyboardMarkup
 from aiohttp import web
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
-from create_bot import bot, dp, BASE_URL, WEBHOOK_PATH, HOST, PORT, ADMIN_ID, client
+from create_bot import bot, dp, BASE_URL, WEBHOOK_PATH, HOST, PORT, ADMIN_ID
 from handlers.user_handlers import router
 from handlers.admin_handlers import router as admin_router
 from utils.utils import cheack_chanel
+import asyncio
+from web_app import start_app
 
 async def set_commands():
     # Создаем список команд, которые будут доступны пользователям
@@ -20,6 +22,8 @@ async def set_commands():
 
 # Функция, которая будет вызвана при запуске бота
 async def on_startup() -> None:
+
+    #await start_app()
     # Устанавливаем командное меню
     await set_commands()
     
@@ -28,6 +32,12 @@ async def on_startup() -> None:
 
     # Отправляем сообщение администратору о том, что бот был запущен
     await bot.send_message(chat_id=ADMIN_ID, text='Бот запущен!')
+    
+
+    
+
+
+
 
 
 
@@ -45,6 +55,7 @@ async def on_shutdown() -> None:
 
 # Основная функция, которая запускает приложение
 def main() -> None:
+       
     # Подключаем маршрутизатор (роутер) для обработки сообщений
     dp.include_router(router)
     dp.include_router(admin_router)
@@ -54,9 +65,9 @@ def main() -> None:
 
     # Регистрируем функцию, которая будет вызвана при остановке бота
     dp.shutdown.register(on_shutdown)
-    
-    #     
 
+    #start_app()
+    
     # Создаем веб-приложение на базе aiohttp
     app = web.Application()
 
@@ -74,15 +85,33 @@ def main() -> None:
     # Запускаем веб-сервер на указанном хосте и порте
     web.run_app(app, host=HOST, port=PORT)
 
+    # Запускаем start app
+
+
+
+    
+
+async def loop_for_check_chenal() -> None:
+    while True:
+        cheack_chanel()
+        asyncio.sleep(3600)
+        
+
+
 
 
 
 # Точка входа в программу
 if __name__ == "__main__":
+    loop_for_check_chenal()
+    main() 
     # Настраиваем логирование (информация, предупреждения, ошибки) и выводим их в консоль
     #logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filename="./log.txt") 
     #logger = logging.getLogger(__name__)  # Создаем логгер для использования в других частях программы
-    main()  # Запускаем основную функцию
+    
+    #main() 
+    
+    # Запускаем основную функцию
 
 
 

@@ -7,10 +7,12 @@ from typing import Any, List
 
 async def cheack_chanel():
     # Подключаемся к клиенту
+    
     await client.start()
 
     # Получаем сообщения из канала
-    async for message in client.iter_messages(channel_username, limit=1):
+    async for message in client.iter_messages(channel_username, limit=4):
+        
         print(message.sender_id, message.text)
 
 
@@ -33,6 +35,20 @@ async def is_user_subscribed(channel_url: str, telegram_id: int) -> bool:
         # Если возникла ошибка (например, пользователь не найден или бот не имеет доступа к каналу)
         print(f"Ошибка при проверке подписки: {e}")
         return False
+
+
+async def text_editor(t) -> str:
+    source = t.split('\n')
+    block_text = source[0]
+    return  block_text
+async def url_editor(t):
+    source = t.split('\n')
+    block_url = source[2]
+    return block_url
+      
+
+
+
 
 
 

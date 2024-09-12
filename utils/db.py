@@ -61,11 +61,18 @@ async def get_projects_by_id(telegram_id: int):
         
         return projs
     
-async def update_bot_open_status(telegram_id: int, bot_open: bool):
+async def get_all_users_by_attack_stack(words:str):
     async with aiosqlite.connect("main.db") as db:
-        await db.execute("""
-            UPDATE Users
-            SET inGroupe = ?
-            WHERE telegram_id = ?
-        """, (bot_open, telegram_id))
-        await db.commit()
+        ans = []
+ 
+        for word in words.split(" "):
+            
+            cursor = await db.execute(f"SELECT telegram_id FROM Projects WHERE stack LIKE '%{word.lower()}%'")
+            find = await cursor.fetchall()
+            if find:
+                ans += find
+    return list(set([x[0] for x in ans]))
+        
+
+
+    
