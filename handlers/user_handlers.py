@@ -17,10 +17,10 @@ router = Router()
 # функция для реагирования на команду /start
 @router.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
-    await message.answer(Welcome_Text = '''Добро пожаловать в бета-верисю телаграм бота для оповещения пользователей о возникновении новых CVE 💻 \n 
-                         Бот создан в рамках хакатона, организованным Itгородом 🦄\n
-                        Кейс от компании Infotecs \n
-                        Для получение дополнительной информации⚙️ - /help ''', reply_markup=await us_kb.main_keyboard())
+    await message.answer(text =  '''Добро пожаловать в бета-верисю телаграм бота для оповещения пользователей о возникновении новых CVE 💻\n 
+                          \nБот создан в рамках хакатона, организованным Itгородом 🦄\n
+                          \nКейс от компании Infotecs\n
+                          \nДля получение дополнительной информации⚙️ - /help ''', reply_markup=await us_kb.main_keyboard())
     telegram_id = message.from_user.id
     user_data = await get_user_by_id(telegram_id)
     if user_data is None:
@@ -37,7 +37,8 @@ async def command_start_handler(message: Message) -> None:
 
     if not inGroupe:
         # Если пользователь подписался на все каналы
-        await message.answer("Тут основная логика бота, чуть позже напишем")
+        #await message.answer("Тут основная логика бота, чуть позже напишем")
+        pass
     else:
         pass
         # Иначе показываем клавиатуру с каналами для подписки
@@ -53,14 +54,24 @@ async def command_start_handler(message: Message) -> None:
 # функция для реагирования на команду /мои проекты
 @router.message(Command('myprojects'))
 async def command_myproject_handler(message: Message) -> None:
-    await message.answer(f"Ваши проекты:{get_projects_by_id(message.from_user.id)}")
+    projects = await get_projects_by_id(message.from_user.id)
+    if projects:
+        text = "Ваши проекты:"
+        for x in projects:
+            text += '\n'+x
+    else:
+        text = "У вас нет проектов"
+    await message.answer(text=text)
 
 
 
 # функция для реагирования на команду /помщь
 @router.message(Command('help'))
 async def command_help_handler(message: Message) -> None:
-    await message.answer(text =str(config("Help_Text")))
+    await message.answer(text ="""Посмотреть свои проекты - /myprojects\n
+                         \nДобавить проект - первая кнопка\n
+                         \nБот, использует miniapps 📲\n
+                         \nОстальные функции будут доступны чуть позже ⏳""")
     
 
 # Рассылка сообщений пользователю

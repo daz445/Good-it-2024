@@ -3,10 +3,10 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
 from decouple import config
 from web_app import start_app
-from create_bot import BASE_URL
+from create_bot import BASE_URL_FOR_APP
 async def main_keyboard():
     kb_list = [
-        [KeyboardButton(text = "Добавить проект",web_app = WebAppInfo(url=BASE_URL+'/add_project'))],
+        [KeyboardButton(text = "Добавить проект",web_app = WebAppInfo(url=f'{BASE_URL_FOR_APP}/add_project/'))],
         [KeyboardButton(text = "Изменить проект")],
         [KeyboardButton(text = "Удалить проект")]
     ]

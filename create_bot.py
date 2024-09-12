@@ -14,6 +14,7 @@ WEBHOOK_PATH = f'/{BOT_TOKEN}'
 BASE_URL = config("BASE_URL")
 API_ID = config("API_ID")
 API_HASH = config("API_HASH")
+BASE_URL_FOR_APP = config('BASE_URL_FOR_APP')
 channel_username = 'bdufstecru'  # юзернейм канала (без @)
 # NGROK =  "https://2feb-46-30-36-215.ngrok-free.app"
 

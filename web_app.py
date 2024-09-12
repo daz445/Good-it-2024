@@ -1,9 +1,8 @@
-import asyncio
 import flet as ft
-from create_bot import BASE_URL
+from create_bot import BASE_URL_FOR_APP
 
-async def main(page: ft.Page) -> None:
-    await asyncio.sleep(1)
+def main(page: ft.Page) -> None:
+    # await asyncio.sleep(1)
     page.title = "Создание проекта"
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
@@ -30,4 +29,4 @@ async def main(page: ft.Page) -> None:
 
 def start_app():
     print("App_start")
-    ft.app(target=main, view=None, port=8080, name="add_project")
+    ft.app(target=main, name="add_project",port=8080,view=None)

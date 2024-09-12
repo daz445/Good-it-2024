@@ -49,8 +49,8 @@ async def get_user_by_id(telegram_id: int):
     
 async def get_projects_by_id(telegram_id: int):
     async with aiosqlite.connect("main.db") as db:
-        cursor = await db.execute("SELECT name FROM Projects WHERE telegram_id = ?", (telegram_id,))
-        rows = await cursor.fetchone()
+        cursor = await db.execute(f"SELECT name FROM Projects WHERE telegram_id = {telegram_id}")
+        rows = await cursor.fetchall()
 
         if rows is None:
             return None
