@@ -7,8 +7,7 @@ from create_bot import BASE_URL_FOR_APP
 async def main_keyboard():
     kb_list = [
         [KeyboardButton(text = "Добавить проект",web_app = WebAppInfo(url=f'{BASE_URL_FOR_APP}/add_project/'))],
-        [KeyboardButton(text = "Изменить проект")],
-        [KeyboardButton(text = "Удалить проект")]
+        [KeyboardButton(text = "🐻 Выгрузить проекты с GitFlic")]
     ]
     kb = ReplyKeyboardMarkup(keyboard = kb_list, resize_keyboard=True,one_time_keyboard=True, input_field_placeholder="Нажми меню")
     return kb
@@ -27,3 +26,11 @@ async def channels_kb(code:str):
                                ]
                                )
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
+
+
+async def check_data():
+    kb_list = [
+        [InlineKeyboardButton(text="✅Да, все верно.", callback_data='correct')],
+        [InlineKeyboardButton(text="🔙Я поменяю имя пользователя", callback_data='incorrect')]
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=kb_list)

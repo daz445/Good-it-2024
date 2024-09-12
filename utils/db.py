@@ -67,11 +67,63 @@ async def get_all_users_by_attack_stack(words:str):
  
         for word in words.split(" "):
             
-            cursor = await db.execute(f"SELECT telegram_id FROM Projects WHERE stack LIKE '%{word.lower()}%'")
+            cursor = await db.execute(f"SELECT telegram_id FROM Stack WHERE stack LIKE '%{word.lower()}%'")
             find = await cursor.fetchall()
             if find:
                 ans += find
     return list(set([x[0] for x in ans]))
+
+
+async def isInproject(telegram_id: int, name: str):
+    async with aiosqlite.connect("main.db") as db:
+        cursor =  await db.execute(f"SELECT * FROM Projects WHERE telegram_id = '{telegram_id}' & name = '{name}'")
+        rows = await cursor.fetchall()
+
+        if rows is None:
+            return False
+        return True
+
+
+
+
+# Добавление проекта пользователя
+async def add_project(telegram_id: int, name: str)->None:
+    async with aiosqlite.connect("main.db") as db:
+        print(await isInproject(telegram_id,name))
+        if not(await isInproject(telegram_id,name)):
+            await db.execute("""
+            INSERT INTO Projects (telegram_id, name)
+            VALUES (?, ?)
+        """, (telegram_id, name))
+            await db.commit()
+
+
+
+
+
+
+
+
+
+
+
+'''
+
+
+
+def edit_iq(ids: str, IQ:int) ->None:
+  users_iq=list(map(lambda x:x[1],all_users_list))
+  users_ids = list(map(lambda x:x[0],all_users_list))
+  cursor.execute(f"UPDATE USERS SET 'IQ' = '{users_iq[users_ids.index(ids)] + IQ}' WHERE id = '{ids}' ")
+  conn.commit()
+
+
+def deleat(base: str,par: str, val)->None:
+	cursor.execute(f'DELETE FROM {base} WHERE {par} = "{val}"')
+	conn.commit()
+
+'''
+
         
 
 

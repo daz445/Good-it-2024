@@ -13,9 +13,9 @@ import multiprocessing
 async def set_commands():
     # Создаем список команд, которые будут доступны пользователям
     commands = [
-                BotCommand(command='start', description='Старт'),
-                BotCommand(command='myprojects', description='Мои проекты'),
-                BotCommand(command='help', description='Помогите')
+                BotCommand(command='menu', description='🏠 Главное меню '),
+                BotCommand(command='myprojects', description='💼 Мои проекты'),
+                BotCommand(command='help', description='😅 Мне нужна помощь')
                 ]
     await bot.set_my_commands(commands, BotCommandScopeDefault())
 

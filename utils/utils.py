@@ -1,6 +1,8 @@
 from aiogram.enums import ContentType, ChatMemberStatus
 from create_bot import bot, client, channel_username
 from typing import Any, List
+import requests
+from bs4 import BeautifulSoup
 
 
 
@@ -35,6 +37,26 @@ async def is_user_subscribed(channel_url: str, telegram_id: int) -> bool:
         # Если возникла ошибка (например, пользователь не найден или бот не имеет доступа к каналу)
         print(f"Ошибка при проверке подписки: {e}")
         return False
+
+
+async def get_projects_and_stack(username:str):
+    URL = 'https://gitflic.ru/search?q='+username
+    HTML = requests.get(URL)
+
+
+    with open('htm.html','w',encoding='utf-8') as file:
+        file.write(HTML.text)
+    with open('htm.html','r',encoding='utf-8') as file:
+        page = file.read()
+    soup = BeautifulSoup(page,'html.parser')
+    
+    sours_projs_name = soup.find_all('a', class_ ="h6 text-primary font-weight-middle mb-0 mr-2")
+    print(sours_projs_name)
+    projs_name = []
+    for proj in sours_projs_name:
+        projs_name.append( proj.text.replace("\n","").strip().split('/')[-1])
+    return projs_name
+ 
 
 
 async def text_editor(t) -> str:
