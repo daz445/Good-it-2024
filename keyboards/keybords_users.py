@@ -28,7 +28,7 @@ async def channels_kb(code:str):
     return InlineKeyboardMarkup(inline_keyboard=inline_keyboard)
 
 
-async def check_data():
+def check_data():
     kb_list = [
         [InlineKeyboardButton(text="✅Да, все верно.", callback_data='correct')],
         [InlineKeyboardButton(text="🔙Я поменяю имя пользователя", callback_data='incorrect')]

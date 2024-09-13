@@ -1,7 +1,8 @@
 from aiogram import Router, F, types
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message,  CallbackQuery
-from decouple import config 
+from decouple import config
+import throttled.limiter 
 from utils.db import get_user_by_id, add_user, get_projects_by_id
 from aiogram.types import Message
 from keyboards import keybords_users as us_kb   
@@ -9,6 +10,7 @@ from create_bot import bot
 from utils import db, utils
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
+import throttled
 
 
 
@@ -20,6 +22,11 @@ class GitFlicExp(StatesGroup):
     username = State()
     result = State()
     check_state = State()
+
+
+async def antiflood(*args, **kwargs):
+    m = args[0]
+    await m.answer("Не флуди :)")
 
 
 # функция для реагирования на команду /start
@@ -130,7 +137,7 @@ async def start_GitFlicExp_check_state_true(call: CallbackQuery, state: FSMConte
     await call.message.edit_reply_markup(reply_markup=None)
     for proj in data.get("projects"):
         await db.add_project(data.get("telegram_id"),proj)
-    await call.answer('Данные сохранены', reply_markup=await us_kb.main_keyboard())
+    await call.answer('Данные сохранены', reply_markup=us_kb.main_keyboard())
     await state.clear()
 
 

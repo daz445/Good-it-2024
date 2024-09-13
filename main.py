@@ -10,6 +10,7 @@ import asyncio
 from web_app import start_app
 import multiprocessing
 
+
 async def set_commands():
     # Создаем список команд, которые будут доступны пользователям
     commands = [
@@ -80,29 +81,13 @@ def main() -> None:
 
 # Точка входа в программу
 if __name__ == "__main__":
-    
-    # asyncio.run(
-    # main()
-        # )
+    logging.basicConfig(level=logging.INFO, filename="./log.txt")    
     
     process1 = multiprocessing.Process(target=main)
     process1.start()
-    # with Pool(processes=4) as pool:
-    #     pool.map(start_app,main)
+
     process2 = multiprocessing.Process(target=start_app)
     process2.start()
-    # await start_app()
-    #process2.join()
     
-
-    # Ждем завершения процессов
-    # process2.join()
-    # process1.join()
-    
-    
-    # Настраиваем логирование (информация, предупреждения, ошибки) и выводим их в консоль
-    
-    # Запускаем основную функцию
-
 
 
