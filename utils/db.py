@@ -1,6 +1,5 @@
 import aiosqlite
 
-
 # Добавляем пользователя
 async def add_user(telegram_id: int, username: str, first_name: str):
     async with aiosqlite.connect("main.db") as db:
@@ -64,14 +63,18 @@ async def get_projects_by_id(telegram_id: int):
 async def get_all_users_by_attack_stack(words:str):
     async with aiosqlite.connect("main.db") as db:
         ans = []
- 
+        data = {}
         for word in words.split(" "):
             
-            cursor = await db.execute(f"SELECT telegram_id FROM Stack WHERE stack LIKE '%{word.lower()}%'")
+            cursor = await db.execute(f"SELECT * FROM Stack WHERE name LIKE '%{word.lower()}%'")
             find = await cursor.fetchall()
             if find:
                 ans += find
-    return list(set([x[0] for x in ans]))
+    data['telegram_id'] = list(set([x[0] for x in ans]))
+    data['project'] = list(set([x[1] for x in ans]))
+    data['name'] = list(set([x[2] for x in ans]))
+
+    return data
 
 
 async def isInproject(telegram_id: int, name: str):
@@ -89,7 +92,7 @@ async def isInproject(telegram_id: int, name: str):
 # Добавление проекта пользователя
 async def add_project(telegram_id: int, name: str)->None:
     async with aiosqlite.connect("main.db") as db:
-        print(await isInproject(telegram_id,name))
+        
         if not(await isInproject(telegram_id,name)):
             await db.execute("""
             INSERT INTO Projects (telegram_id, name)

@@ -81,6 +81,7 @@ async def command_myproject_handler(message: Message) -> None:
 
 
 
+
 # функция для реагирования на команду /помщь
 @router.message(Command('help'))
 async def command_help_handler(message: Message) -> None:
@@ -96,11 +97,18 @@ async def chanel_cmd(chanel:Message):
     t = chanel.text
     users = await db.get_all_users_by_attack_stack(str(await utils.text_editor(t)).lower())
     
-    for user in users:
+    for i,user in enumerate( users['telegram_id']):
         url = await utils.url_editor(t)
         await bot.send_message(chat_id=user,
-                               text= "Выявлена новая уязвимость",reply_markup= await us_kb.channels_kb(url))
-            
+                               text= f"Выявлена новая уязвимость {users['name'][i]} в вашем проекте:\n{users['project'][i]}",reply_markup= await us_kb.channels_kb(url))
+
+@router.message(Command('help'))
+async def command_help_handler(message: Message) -> None:
+    await message.answer(text ="""Посмотреть свои проекты - /myprojects\n
+                         \nДобавить проект - первая кнопка\n
+                         \nБот, использует miniapps 📲\n
+                         \nОстальные функции будут доступны чуть позже ⏳""")
+
 # Выгрузка проекта
 @router.message(F.text.contains('🐻 Выгрузить проекты с GitFlic'))
 async def command_help_handler(message: Message, state: FSMContext) -> None:
@@ -113,17 +121,17 @@ async def start_GitFlicExp_username(message: Message, state: FSMContext):
     ans= await utils.get_projects_and_stack(message.text)
     
     if ans:
-        data = await state.get_data()
         await state.update_data(projects=ans)
         caption = f'Для данного пользователя, я нашел вот такие проекты:\n-{message.text}'
         for proj in ans:
             caption += "\n--> "+proj  
         caption+= "\n\n"+"Хотите добавить название проектов к себе в профиль?"     
         await state.update_data(telegram_id=message.chat.id)
-        await message.answer(text=caption, reply_markup= await us_kb.check_data())
+        await message.answer(text=caption, reply_markup= us_kb.check_data())
         await state.set_state(GitFlicExp.check_state)
     else:
         await message.answer(text ='Что-то пошло не так( Попробуйте еще раз')
+
 
 
 
@@ -137,7 +145,7 @@ async def start_GitFlicExp_check_state_true(call: CallbackQuery, state: FSMConte
     await call.message.edit_reply_markup(reply_markup=None)
     for proj in data.get("projects"):
         await db.add_project(data.get("telegram_id"),proj)
-    await call.answer('Данные сохранены', reply_markup=us_kb.main_keyboard())
+    await call.answer('✅ Успех ваши проекты сохранены', reply_markup=await us_kb.main_keyboard())
     await state.clear()
 
 

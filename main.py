@@ -81,7 +81,12 @@ def main() -> None:
 
 # Точка входа в программу
 if __name__ == "__main__":
+
+
     logging.basicConfig(level=logging.INFO, filename="./log.txt")    
+    logger = logging.getLogger(__name__)
+
+    q = multiprocessing.Queue()
     
     process1 = multiprocessing.Process(target=main)
     process1.start()
